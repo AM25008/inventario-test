@@ -25,15 +25,6 @@ public class InventarioBackend {
 		if(precio < 0) {
 			throw new IllegalArgumentException("Error: El precio no puede ser negativo");
 		}
-		
-		String price = Double.toString(precio);
-		
-		if(price.matches("^[0-9]*$")) {
-			throw new IllegalArgumentException("Error: El precio deben ser unicamente numeros");
-		}
-		else if(price == null || price.trim().isEmpty()){
-            throw new IllegalArgumentException("Error: El precio no puede estar vacio");
-        }
 	}
 	
 	public void validarDescripcion(String descripcion) {
