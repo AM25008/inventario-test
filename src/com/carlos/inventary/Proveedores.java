@@ -14,4 +14,9 @@ public class Proveedores {
 	public String getNombreProveedor() {
 		return nombreProveedor;
 	}
+	
+    @Override
+    public String toString() {
+        return nombreProveedor;
+    }
 }

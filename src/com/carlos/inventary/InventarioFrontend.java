@@ -71,11 +71,11 @@ public class InventarioFrontend {
 		if(back.getProveedores().isEmpty()) {
 			message += "Sin proveedores registrados";
 		}
-		for(int i = 0; i <= back.getProveedores().size(); i++) {
-			message += (i+1) + ". " + back.getProveedores().get(i);
+		for(int i = 0; i < back.getProveedores().size(); i++) {
+			message += (i+1) + ". " + back.getProveedores().get(i) + "\n";
 		}
 		
-		return message;
+		return message.toString();
 	}
 	
 	public void registrarProducto() {
@@ -119,7 +119,7 @@ public class InventarioFrontend {
 		}
 		
 		while(!proveOk) {
-			mostrarProveedores();
+			System.out.println(mostrarProveedores()); 
 			System.out.println("Ingresa el indice del proveedor del producto: ");
 			proveIndex = Integer.parseInt(sc.nextLine()) - 1;
 			

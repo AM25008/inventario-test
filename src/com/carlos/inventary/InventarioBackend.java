@@ -19,15 +19,6 @@ public class InventarioBackend {
 		if(stock < 0) {
 			throw new IllegalArgumentException("Error: El stock inicial no puede ser negativo");
 		}
-		
-		String stockk = Integer.toString(stock);
-				
-		if(stockk.matches("^[0-9]*$")) {
-			throw new IllegalArgumentException("Error: El stock deben ser unicamente numeros");
-		}
-		else if(stockk == null || stockk.trim().isEmpty()){
-            throw new IllegalArgumentException("Error: El stock no puede estar vacio");
-        }
 	}
 	
 	public void validarPrecio(double precio) {
