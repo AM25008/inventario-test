@@ -1,4 +1,4 @@
-package com.carlos.inventary;
+package com.carlos.inventary.models;
 
 public class Productos {
 	private String nombreProducto;
@@ -34,5 +34,22 @@ public class Productos {
 	public String getDescripcion() {
 		return descripcionProducto;
 	}
+	
+	public void setNombreProducto(String nombreProducto) {
+		this.nombreProducto = nombreProducto;
+	}
+	
+	public void setStockProducto(int stockProducto) {
+		this.stockProducto = stockProducto;
+	}
+	
+	public void setPrecioProducto(double precioProducto) {
+		this.precioProducto = precioProducto;
+	}
+	
+	public void setDescripcion(String descripcionProducto) {
+		this.descripcionProducto = descripcionProducto;
+	}
+	
 	
 }

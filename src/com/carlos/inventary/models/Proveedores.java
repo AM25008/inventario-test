@@ -1,4 +1,4 @@
-package com.carlos.inventary;
+package com.carlos.inventary.models;
 
 public class Proveedores {
 	String nombreProveedor;
@@ -15,8 +15,15 @@ public class Proveedores {
 		return nombreProveedor;
 	}
 	
-    @Override
-    public String toString() {
-        return nombreProveedor;
+    public void setNombreProveedor(String nombreProveedor) {
+    	this.nombreProveedor = nombreProveedor;
+    }
+    
+    public void setTelefonoProveedor(String telefonoProveedor) {
+    	this.telefonoProveedor = telefonoProveedor;
+    }
+    
+    public void setEmailProveedor(String emailProveedor) {
+    	this.emailProveedor = emailProveedor;
     }
 }
