@@ -53,5 +53,9 @@ public class gestor_proveedores {
 		
 		listaProveedores.add(new Proveedores(nombre, telefono, email));
 	}
+
+	public List<Proveedores> getProveedores(){
+		return listaProveedores;
+	}
 	
 }

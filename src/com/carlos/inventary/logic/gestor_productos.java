@@ -20,11 +20,11 @@ public class gestor_productos {
 		
 		int indexCast = Integer.parseInt(index);
 		
-		if (indexCast < 0 || indexCast >= size) {
+		if (indexCast <= 0 || indexCast > size) {
 			throw new IllegalArgumentException("Indice fuera de rango");
 		}
 		
-		return indexCast;
+		return indexCast - 1;
 	}
 	
 	public void validarNombre(String nombre) {
@@ -89,16 +89,12 @@ public class gestor_productos {
 		}
 	}
 	
-	public void registrarProducto(String nombre, String stock, Proveedores proveedor, String precio, String descripcion) {
+	public void registrarProducto(String nombre, int stock, Proveedores proveedor, double precio, String descripcion) {
 		validarNombre(nombre);
 		validarProductoRegistrado(nombre);
-		
-		int stockk = validarStock(stock);
-		double price = validarPrecio(precio);
-		
 		validarDescripcion(descripcion);
 		
-		listaProductos.add(new Productos(nombre, stockk, proveedor, price, descripcion));
+		listaProductos.add(new Productos(nombre, stock, proveedor, precio, descripcion));
 		
 	}
 	
@@ -109,6 +105,10 @@ public class gestor_productos {
 			}
 		}
 		throw new IllegalArgumentException("Producto no encontrado");
+	}
+
+	public List<Productos> getProductos(){
+		return listaProductos;
 	}
 	
 }
