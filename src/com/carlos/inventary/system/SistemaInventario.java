@@ -85,15 +85,15 @@ public class SistemaInventario {
 				continue;
 
 			case 3:
-				//
+				eliminarProducto();
 				continue;
 			
 			case 4:
-				//
+				actualizarPrecioProducto();
 				continue;
 
 			case 5:
-				//
+				verStockActual();
 				continue;
 
 			case 0:
@@ -127,11 +127,11 @@ public class SistemaInventario {
 
 		switch (opcion) {
 			case 1:
-				// 
+				registrarProveedor();
 				continue;
 
 			case 2:
-				//
+				mostrarProveedores();
 				continue;
 
 			case 3:
@@ -309,7 +309,7 @@ public class SistemaInventario {
 		registrado = false;
 
 		while(!registrado){
-			System.out.print("Ingresa el precio del producto: ");
+			System.out.print("\nIngresa el precio del producto: ");
 
 			try{
 				precio = productosService.validarPrecio(sc.nextLine());
@@ -325,7 +325,7 @@ public class SistemaInventario {
 		registrado = false;
 
 		while(!registrado){
-			System.out.print("Ingresa una descripcion del producto (opcional): ");
+			System.out.print("\nIngresa una descripcion del producto (opcional): ");
 			descripcion = sc.nextLine();
 
 			try{
@@ -340,26 +340,22 @@ public class SistemaInventario {
 		}
 
 		productosService.registrarProducto(nombre, stock, proveedoresService.getProveedores().get(index), precio, descripcion);
+		
+		System.out.println("\n-- PRODUCTO REGISTRADO CON EXITO --");
 	}
 
 	public void mostrarProductos(){
-		if(productosService.getProductos().isEmpty()){
-			System.out.println("\n----------------------------------");
-			System.out.println("No hay productos registrados aun");
-			System.out.println("----------------------------------");
-		}
-		else{
-			System.out.println("\n-- PRODUCTOS REGISTRADOS --");
-			for(int i = 0; i < productosService.getProductos().size(); i++){
-				System.out.println((i+1) + "- " + productosService.getProductos().get(i).getNombreProducto());
-			}
+		System.out.println("\n-- PRODUCTOS REGISTRADOS --");
+		for(int i = 0; i < productosService.getProductos().size(); i++){
+			System.out.println((i+1) + "- " + productosService.getProductos().get(i).getNombreProducto());
 		}
 	}
-
+	
 	public void eliminarProducto(){
-		boolean reg = false;
+		boolean regis = false;
+		int index = 0;
 
-		while(!reg){
+		while(!regis){
 			if(productosService.getProductos().isEmpty()){
 			System.out.println("\n----------------------------------");
 			System.out.println("No hay productos registrados aun");
@@ -368,23 +364,152 @@ public class SistemaInventario {
 
 			}
 			else{
-				System.out.println("\n-- PRODUCTOS REGISTRADOS --");
-				for(int i = 0; i < productosService.getProductos().size(); i++){
-					System.out.println((i+1) + "- " + productosService.getProductos().get(i).getNombreProducto());
-				}
-				System.out.print("Ingresa el indice del producto a eliminar: ");
+				mostrarProductos();
+				System.out.print("\nIngresa el indice del producto a eliminar: ");
 				String indexProd = sc.nextLine();
 
 				try{
-					productosService.validarIndex(indexProd, productosService.getProductos().size());
+					index = productosService.validarIndex(indexProd, productosService.getProductos().size());
+					regis = true;
 				}catch(IllegalArgumentException e){
 					System.out.println("\n----------------------------------");
                 	System.out.println("Error: " + e.getMessage());
                 	System.out.println("Intenta nuevamente...");
                 	System.out.println("----------------------------------\n");
+				}
 			}
 		}
+		
+		productosService.eliminarProducto(index);
+	}
+	
+	public void actualizarPrecioProducto() {
+		boolean regis = false;
+		String indexProd = "";
+		int index = 0;
+		
+		while(!regis) {
+			if(productosService.getProductos().isEmpty()){
+				System.out.println("\n----------------------------------");
+				System.out.println("No hay productos registrados aun");
+				System.out.println("----------------------------------");
+				
+				return;
+			}
+			else {
+				mostrarProductos();
+				System.out.print("\nIngresa el indice del producto: ");
+				indexProd = sc.nextLine();
+				
+				try {
+					index = productosService.validarIndex(indexProd, productosService.getProductos().size());
+					regis = true;
+					
+				}catch(IllegalArgumentException e) {
+					System.out.println("\n----------------------------------");
+                	System.out.println("Error: " + e.getMessage());
+                	System.out.println("Intenta nuevamente...");
+                	System.out.println("----------------------------------\n");
+				}
+			}
 		}
+		
+		regis = false;
+		double precio = 0;
+		
+		while(!regis) {
+			System.out.print("\nIngresa el precio del producto: ");
+
+			try{
+				precio = productosService.validarPrecio(sc.nextLine());
+				regis = true;
+			}catch(IllegalArgumentException e){
+				System.out.println("\n----------------------------------");
+                System.out.println("Error: " + e.getMessage());
+                System.out.println("Intenta nuevamente...");
+                System.out.println("----------------------------------\n");
+			}
+		}
+		
+		productosService.actualizarPrecioProducto(index, precio);
+	}
+	
+	public void verStockActual() {
+		if(productosService.getProductos().isEmpty()) {
+			System.out.println("\n----------------------------------");
+			System.out.println("No hay productos registrados");
+			System.out.println("----------------------------------\n");
+		}else {
+			System.out.println("\n-- STOCK ACTUAL --\n");
+			for(int i = 0; i < productosService.getProductos().size(); i++) {
+				System.out.println("\n--- Producto [" + (i+1) + "] ---");
+				System.out.println("Nombre del producto: " + productosService.getProductos().get(i).getNombreProducto());
+				System.out.println("Stock: " + productosService.getProductos().get(i).getStockProducto());
+				System.out.println("Proveedor: " + productosService.getProductos().get(i).getProveedor());
+				System.out.println("Precio: " + productosService.getProductos().get(i).getPrecioProducto());
+				System.out.println("Descripcion: " + productosService.getProductos().get(i).getDescripcion());
+				System.out.println("------------------------------------------------------------");
+			}
+		}
+	}
+	
+	public void registrarProveedor() {
+		String nombre = "";
+		String telefono = "";
+		String email = "";
+		boolean registrado = false;
+
+		while (!registrado){
+			System.out.print("\nIngresa el nombre del proveedor: ");
+			nombre = sc.nextLine();
+
+			try{
+				proveedoresService.validarNombreProv(nombre);
+				registrado = true;
+			}catch(IllegalArgumentException e){
+				System.out.println("\n----------------------------------");
+                System.out.println("Error: " + e.getMessage());
+                System.out.println("Intenta nuevamente...");
+                System.out.println("----------------------------------\n");
+			}
+		}
+		
+		registrado = false;
+		
+		while (!registrado){
+			System.out.print("\nIngresa el telefono del proveedor: ");
+			telefono = sc.nextLine();
+
+			try{
+				proveedoresService.validarTelefono(telefono);
+				registrado = true;
+			}catch(IllegalArgumentException e){
+				System.out.println("\n----------------------------------");
+                System.out.println("Error: " + e.getMessage());
+                System.out.println("Intenta nuevamente...");
+                System.out.println("----------------------------------\n");
+			}
+		}
+		
+		registrado = false;
+		
+		while (!registrado){
+			System.out.print("\nIngresa el email del proveedor: ");
+			email = sc.nextLine();
+
+			try{
+				proveedoresService.validarEmail(email);
+				registrado = true;
+			}catch(IllegalArgumentException e){
+				System.out.println("\n----------------------------------");
+                System.out.println("Error: " + e.getMessage());
+                System.out.println("Intenta nuevamente...");
+                System.out.println("----------------------------------\n");
+			}
+		}
+		
+		proveedoresService.registrarProveedor(nombre, telefono, email);
+		System.out.println("\n-- PROVEEDOR REGISTRADO CON EXITO --");
 	}
 
 

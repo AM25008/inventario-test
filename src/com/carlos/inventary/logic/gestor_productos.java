@@ -111,6 +111,14 @@ public class gestor_productos {
 		return listaProductos;
 	}
 	
+	public void actualizarPrecioProducto(int index, double precio) {
+		listaProductos.get(index).setPrecioProducto(precio);
+	}
+	
+	public void eliminarProducto(int index) {
+		listaProductos.remove(index);
+	}
+	
 }
 
 
