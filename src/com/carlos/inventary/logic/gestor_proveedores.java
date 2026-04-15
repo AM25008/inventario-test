@@ -58,4 +58,8 @@ public class gestor_proveedores {
 		return listaProveedores;
 	}
 	
+	public void eliminarProveedor(int index) {
+		listaProveedores.remove(index);
+	}
+	
 }

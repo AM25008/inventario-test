@@ -135,15 +135,11 @@ public class SistemaInventario {
 				continue;
 
 			case 3:
-				//
+				eliminarProveedor();
 				continue;
 			
 			case 4:
-				//
-				continue;
-
-			case 5:
-				//
+				actualizarInfoProveedor();
 				continue;
 
 			case 0:
@@ -511,8 +507,174 @@ public class SistemaInventario {
 		proveedoresService.registrarProveedor(nombre, telefono, email);
 		System.out.println("\n-- PROVEEDOR REGISTRADO CON EXITO --");
 	}
+	
+	public void eliminarProveedor() {
+		boolean regis = false;
+		int index = 0;
 
+		while(!regis){
+			if(proveedoresService.getProveedores().isEmpty()){
+			System.out.println("\n----------------------------------");
+			System.out.println("No hay proveedores registrados aun");
+			System.out.println("----------------------------------");
+			return;
 
+			}
+			else{
+				mostrarProveedores();
+				System.out.print("\nIngresa el indice del proveedor a eliminar: ");
+				String indexProv = sc.nextLine();
+
+				try{
+					index = productosService.validarIndex(indexProv, proveedoresService.getProveedores().size());
+					regis = true;
+				}catch(IllegalArgumentException e){
+					System.out.println("\n----------------------------------");
+                	System.out.println("Error: " + e.getMessage());
+                	System.out.println("Intenta nuevamente...");
+                	System.out.println("----------------------------------\n");
+				}
+			}
+		}
+		
+		proveedoresService.eliminarProveedor(index);
+	}
+	
+	public void actualizarInfoProveedor() {
+		boolean regis = false;
+		int index = 0;
+
+		while(!regis){
+			if(proveedoresService.getProveedores().isEmpty()){
+			System.out.println("\n----------------------------------");
+			System.out.println("No hay proveedores registrados aun");
+			System.out.println("----------------------------------");
+			return;
+
+			}
+			else{
+				mostrarProveedores();
+				System.out.print("\nIngresa el indice del proveedor a editar: ");
+				String indexProv = sc.nextLine();
+
+				try{
+					index = productosService.validarIndex(indexProv, proveedoresService.getProveedores().size());
+					regis = true;
+				}catch(IllegalArgumentException e){
+					System.out.println("\n----------------------------------");
+                	System.out.println("Error: " + e.getMessage());
+                	System.out.println("Intenta nuevamente...");
+                	System.out.println("----------------------------------\n");
+				}
+			}
+		}
+		
+		int indice = 0;
+		
+		do {
+			menuEditarInfoProveedor();
+			System.out.print("\nElige una opcion: ");
+			indice = Integer.parseInt(sc.nextLine());
+			
+			switch (indice){
+				case 1:
+					setNombreProv(index);
+					break;
+					
+				case 2:
+					setTelefonoProv(index);
+					break;
+					
+				case 3:
+					setEmailProv(index);
+					break;
+					
+				case 0:
+					System.out.println("\n-------------------------------------------");
+					System.out.println("Volviendo al menu de proveedores...");
+					System.out.println("-------------------------------------------");
+					break;
+			}
+		}while(indice != 0 || (indice < 1 && indice > 3));
+		
+	}
+	
+	public void menuEditarInfoProveedor() {
+		System.out.println("""
+				1- Editar nombre
+				2- Editar Telefono
+				3- Editar email
+				0- Salir
+				""");
+	}
+	
+	public void setNombreProv(int index) {
+		String nombre = "";
+		boolean registrado = false;
+
+		while (!registrado){
+			System.out.print("\nIngresa el nombre del proveedor: ");
+			nombre = sc.nextLine();
+
+			try{
+				proveedoresService.validarNombreProv(nombre);
+				registrado = true;
+			}catch(IllegalArgumentException e){
+				System.out.println("\n----------------------------------");
+                System.out.println("Error: " + e.getMessage());
+                System.out.println("Intenta nuevamente...");
+                System.out.println("----------------------------------\n");
+			}
+		}
+		
+		proveedoresService.getProveedores().get(index).setNombreProveedor(nombre);
+		
+		System.out.println("\n-- NOMBRE DEL PROVEEDOR CAMBIADO CON EXITO --");
+	}
+	
+	public void setTelefonoProv(int index) {
+		String telefono = "";
+		boolean registrado = false;
+		
+		while (!registrado){
+			System.out.print("\nIngresa el telefono del proveedor: ");
+			telefono = sc.nextLine();
+
+			try{
+				proveedoresService.validarTelefono(telefono);
+				registrado = true;
+			}catch(IllegalArgumentException e){
+				System.out.println("\n----------------------------------");
+                System.out.println("Error: " + e.getMessage());
+                System.out.println("Intenta nuevamente...");
+                System.out.println("----------------------------------\n");
+			}
+		}
+		
+		proveedoresService.getProveedores().get(index).setTelefonoProveedor(telefono);
+	}
+	
+	public void setEmailProv(int index) {
+		String email = "";
+		boolean registrado = false;
+		
+		while (!registrado){
+			System.out.print("\nIngresa el email del proveedor: ");
+			email = sc.nextLine();
+
+			try{
+				proveedoresService.validarEmail(email);
+				registrado = true;
+			}catch(IllegalArgumentException e){
+				System.out.println("\n----------------------------------");
+                System.out.println("Error: " + e.getMessage());
+                System.out.println("Intenta nuevamente...");
+                System.out.println("----------------------------------\n");
+			}
+		}
+		
+		proveedoresService.getProveedores().get(index).setEmailProveedor(email);
+	}
 	
 	
 }
