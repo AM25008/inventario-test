@@ -262,6 +262,7 @@ public class SistemaInventario {
 
 			try{
 				productosService.validarNombre(nombre);
+				productosService.validarProductoRegistrado(nombre);
 				registrado = true;
 			}catch(IllegalArgumentException e){
 				System.out.println("\n----------------------------------");
