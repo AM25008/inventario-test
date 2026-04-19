@@ -50,21 +50,16 @@ public class gestor_movimientos {
 		return cantidad;
 	}
 	
-	public void registrarEntrada(String nombre, String tipo, String cantidad, String fecha) {
-		int cant = validarEntrada(cantidad);
-		
-		listaMovimientos.add(new MovimientoInventario(nombre, tipo, cant, fecha));
+	public void registrarEntrada(String nombre, String tipo, int cantidad, String fecha, String hora) {
+		listaMovimientos.add(new MovimientoInventario(nombre, tipo, cantidad, fecha, hora));
 	}
 	
-	public void registrarSalida(String nombre, String tipo, String cantidad, String fecha) {
-		Productos pro = gestorProductos.buscarProducto(nombre);
-		
-		int stockProd = pro.getStockProducto();
-		
-		int cant = validarSalida(cantidad, stockProd);
-		
-		listaMovimientos.add(new MovimientoInventario(nombre, tipo, cant, fecha));
+	public void registrarSalida(String nombre, String tipo, int cantidad, String fecha, String hora) {
+		listaMovimientos.add(new MovimientoInventario(nombre, tipo, cantidad, fecha, hora));
 	}
 	
+	public List<MovimientoInventario> getMovimientos() {
+		return listaMovimientos;
+	}
 	
 }
