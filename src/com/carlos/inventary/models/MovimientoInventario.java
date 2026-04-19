@@ -5,12 +5,14 @@ public class MovimientoInventario {
 	private String tipoMovimiento;
 	private int cantidad;
 	private String fecha;
+	private String hora;
 	
-	public MovimientoInventario(String nombreProducto, String tipoMovimiento, int cantidad, String fecha) {
+	public MovimientoInventario(String nombreProducto, String tipoMovimiento, int cantidad, String fecha, String hora) {
 		this.nombreProducto = nombreProducto;
 		this.tipoMovimiento = tipoMovimiento;
 		this.cantidad = cantidad;
 		this.fecha = fecha;
+		this.hora = hora;
 	}
 	
 	public String getNombreProduco() {
@@ -27,6 +29,10 @@ public class MovimientoInventario {
 	
 	public String getFecha() {
 		return fecha;
+	}
+	
+	public String getHora() {
+		return hora;
 	}
 	
 }
