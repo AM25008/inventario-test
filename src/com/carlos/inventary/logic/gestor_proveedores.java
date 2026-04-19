@@ -51,7 +51,7 @@ public class gestor_proveedores {
 		validarTelefono(telefono);
 		validarEmail(email);
 		
-		listaProveedores.add(new Proveedores(nombre, telefono, email));
+		listaProveedores.add(new Proveedores(nombre.toString(), telefono, email));
 	}
 
 	public List<Proveedores> getProveedores(){
