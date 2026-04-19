@@ -119,6 +119,22 @@ public class gestor_productos {
 		listaProductos.remove(index);
 	}
 	
+	public void aumentarStock(int index, int cantidad) {
+		int stock = listaProductos.get(index).getStockProducto();
+		
+		int newStock = stock + cantidad;
+		
+		listaProductos.get(index).setStockProducto(newStock);
+	}
+	
+	public void disminuirStock(int index, int cantidad) {
+		int stock = listaProductos.get(index).getStockProducto();
+		
+		int newStock = stock - cantidad;
+		
+		listaProductos.get(index).setStockProducto(newStock);
+	}
+	
 }
 
 
