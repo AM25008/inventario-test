@@ -26,4 +26,9 @@ public class Proveedores {
     public void setEmailProveedor(String emailProveedor) {
     	this.emailProveedor = emailProveedor;
     }
+    
+    @Override
+    public String toString() {
+    	return nombreProveedor;
+    }
 }
