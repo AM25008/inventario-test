@@ -4,6 +4,9 @@ import java.util.Scanner;
 
 import com.carlos.inventary.logic.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class SistemaInventario {
 	Scanner sc = new Scanner(System.in);
 	
@@ -81,7 +84,7 @@ public class SistemaInventario {
 				continue;
 
 			case 2:
-				mostrarProductos();
+				showProducto();
 				continue;
 
 			case 3:
@@ -131,7 +134,7 @@ public class SistemaInventario {
 				continue;
 
 			case 2:
-				mostrarProveedores();
+				showProvs();;
 				continue;
 
 			case 3:
@@ -175,7 +178,7 @@ public class SistemaInventario {
 				continue;
 
 			case 2:
-				//
+				mostrarHistorial();
 				continue;
 
 			case 0:
@@ -207,11 +210,11 @@ public class SistemaInventario {
 
 		switch (opcion) {
 			case 1:
-				//
+				registratEntrada();
 				continue;
 
 			case 2:
-				//
+				registrarSalida();
 				continue;
 
 			case 0:
@@ -233,7 +236,16 @@ public class SistemaInventario {
 		for(int i = 0; i < proveedoresService.getProveedores().size(); i++){
 			System.out.println((i+1) + "- " + proveedoresService.getProveedores().get(i).getNombreProveedor());
 		}
-
+	}
+	
+	public void showProvs() {
+		if(proveedoresService.getProveedores().isEmpty()) {
+			System.out.println("\n----------------------------------");
+			System.out.println("No hay proveedores registrados");
+			System.out.println("----------------------------------\n");
+		}else {
+			mostrarProveedores();
+		}
 	}
 
 	public void registrarProducto(){
@@ -347,6 +359,17 @@ public class SistemaInventario {
 		}
 	}
 	
+	public void showProducto() {
+		if(productosService.getProductos().isEmpty()){
+			System.out.println("\n----------------------------------");
+			System.out.println("No hay productos registrados aun");
+			System.out.println("----------------------------------");
+			return;
+		}else {
+			mostrarProductos();
+		}
+	}
+		
 	public void eliminarProducto(){
 		boolean regis = false;
 		int index = 0;
@@ -676,5 +699,142 @@ public class SistemaInventario {
 		proveedoresService.getProveedores().get(index).setEmailProveedor(email);
 	}
 	
+	public void registratEntrada() {
+		boolean estado = false;
+		int index = 0;
+
+		while(!estado){
+			if(productosService.getProductos().isEmpty()){
+			System.out.println("\n----------------------------------");
+			System.out.println("No hay productos registrados aun");
+			System.out.println("----------------------------------");
+			return;
+
+			}
+			else{
+				mostrarProductos();
+				System.out.print("\nIngresa el indice del producto: ");
+				String indexProd = sc.nextLine();
+
+				try{
+					index = productosService.validarIndex(indexProd, productosService.getProductos().size());
+					estado = true;
+				}catch(IllegalArgumentException e){
+					System.out.println("\n----------------------------------");
+                	System.out.println("Error: " + e.getMessage());
+                	System.out.println("Intenta nuevamente...");
+                	System.out.println("----------------------------------\n");
+				}
+			}
+		}
+		
+		estado = false;
+		int cantidad = 0;
+		
+		while(!estado) {
+			System.out.print("\nIngresa la cantidad que deseas añadir: ");
+			String cant = sc.nextLine();
+			
+			try {
+				cantidad = movimientosService.validarEntrada(cant);
+				estado = true;
+			}catch(IllegalArgumentException e) {
+				System.out.println("\n----------------------------------");
+            	System.out.println("Error: " + e.getMessage());
+            	System.out.println("Intenta nuevamente...");
+            	System.out.println("----------------------------------\n");
+			}
+		}
+		
+		String nombre = productosService.getProductos().get(index).getNombreProducto();
+		String tipoMovimiento = "Entrada";
+		
+		productosService.aumentarStock(index, cantidad);;
+		
+		LocalDateTime now = LocalDateTime.now();
+		String fecha = now.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+		String hora = now.format(DateTimeFormatter.ofPattern("HH:mm"));
+		
+		movimientosService.registrarEntrada(nombre, tipoMovimiento, cantidad, fecha, hora);
+	}
+	
+	public void registrarSalida() {
+		boolean estado = false;
+		int index = 0;
+
+		while(!estado){
+			if(productosService.getProductos().isEmpty()){
+			System.out.println("\n----------------------------------");
+			System.out.println("No hay productos registrados aun");
+			System.out.println("----------------------------------");
+			return;
+
+			}
+			else{
+				mostrarProductos();
+				System.out.print("\nIngresa el indice del producto: ");
+				String indexProd = sc.nextLine();
+
+				try{
+					index = productosService.validarIndex(indexProd, productosService.getProductos().size());
+					estado = true;
+				}catch(IllegalArgumentException e){
+					System.out.println("\n----------------------------------");
+                	System.out.println("Error: " + e.getMessage());
+                	System.out.println("Intenta nuevamente...");
+                	System.out.println("----------------------------------\n");
+				}
+			}
+		}
+		
+		estado = false;
+		int cantidad = 0;
+		
+		while(!estado) {
+			System.out.print("\nIngresa la cantidad que deseas restar: ");
+			String cant = sc.nextLine();
+			
+			try {
+				cantidad = movimientosService.validarSalida(cant, productosService.getProductos().get(index).getStockProducto());
+				estado = true;
+			}catch(IllegalArgumentException e) {
+				System.out.println("\n----------------------------------");
+            	System.out.println("Error: " + e.getMessage());
+            	System.out.println("Intenta nuevamente...");
+            	System.out.println("----------------------------------\n");
+			}
+		}
+		
+		String nombre = productosService.getProductos().get(index).getNombreProducto();
+		String tipoMovimiento = "Salida";
+		
+		productosService.disminuirStock(index, cantidad);
+		
+		LocalDateTime now = LocalDateTime.now();
+		String fecha = now.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+		String hora = now.format(DateTimeFormatter.ofPattern("HH:mm"));
+		
+		movimientosService.registrarSalida(nombre, tipoMovimiento, cantidad, fecha, hora);
+	}
+	
+	public void mostrarHistorial() {
+		if(movimientosService.getMovimientos().isEmpty()) {
+			System.out.println("\n----------------------------------");
+			System.out.println("No hay movimientos registrados aun");
+			System.out.println("----------------------------------");
+			return;
+		}else {
+			System.out.println("\n-- MOVIMIENTOS REGISTRADOS --");
+			for(int i = 0; i < movimientosService.getMovimientos().size(); i++) {
+				System.out.println("-- MOVIMIENTO " + (i+1) + " --");
+				System.out.println("Producto: " + movimientosService.getMovimientos().get(i).getNombreProduco());
+				System.out.println("Tipo de movimiento: " + movimientosService.getMovimientos().get(i).getTipoMovimiento());
+				System.out.println("Cantidad: " + movimientosService.getMovimientos().get(i).getCantidad());
+				System.out.println("Fecha: " + movimientosService.getMovimientos().get(i).getFecha());
+				System.out.println("Hora: " + movimientosService.getMovimientos().get(i).getHora());
+				System.out.println("------------------------------------------------------------------------\n");
+			}
+		}
+	}
 	
 }
